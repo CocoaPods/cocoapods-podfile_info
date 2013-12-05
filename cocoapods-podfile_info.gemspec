@@ -6,7 +6,7 @@ require 'cocoapods-podfile_info.rb'
 Gem::Specification.new do |spec|
   spec.name          = 'cocoapods-podfile_info'
   spec.version       = PodfileInfo::VERSION
-  spec.authors       = ['CocoaPods Dev Team']
+  spec.authors       = ['Taras Kalapun', 'Joshua Kalpin']
   spec.description   = %q{CocoaPods plugin to show information on installed pods in the current project}
   spec.summary       = %q{Show a info on installed pods}
   spec.homepage      = 'https://github.com/cocoapods/cocoapods-podfile_info'
