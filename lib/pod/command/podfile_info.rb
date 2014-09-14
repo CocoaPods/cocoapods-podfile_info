@@ -8,7 +8,9 @@ module Pod
         If optional `PODFILE_PATH` provided, the info will be shown for
         that specific Podfile
       DESC
-      self.arguments = '[PODFILE_PATH]'
+      self.arguments = [
+        CLAide::Argument.new('PODFILE_PATH', false)
+      ]
 
       def self.options
         [
@@ -85,3 +87,4 @@ module Pod
     end
   end
 end
+
