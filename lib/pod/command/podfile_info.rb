@@ -85,7 +85,7 @@ module Pod
           when :md
             UI.puts "* [#{pod[:name]} - #{pod[:version]}](#{pod[:homepage]}) [#{pod[:license][:type]}] - #{pod[:summary]}"
           when :csv
-            UI.puts "#{pod[:name]},  #{pod[:version]}, #{pod[:homepage]}, \"#{pod[:summary]}\", #{pod[:license][:type]}"
+            UI.puts "#{pod[:name]},  #{pod[:version]}, #{pod[:homepage]}, \"#{pod[:summary]}\", \"#{pod[:license][:type]}\""
           else
             UI.puts "- #{pod[:name]} (#{pod[:version]}) [#{pod[:license][:type]}]".green
             UI.puts "  #{pod[:summary]}\n\n"
