@@ -16,7 +16,7 @@ module Pod
         [
             ["--all", "Show information about all Pods with dependencies that are used in a project"],
             ["--md", "Output information in Markdown format"],
-            ["--csv", "Output information in Markdown format"]
+            ["--csv", "Output information in CSV format"]
         ].concat(super)
       end
 
