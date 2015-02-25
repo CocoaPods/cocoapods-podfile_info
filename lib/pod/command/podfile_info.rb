@@ -15,14 +15,18 @@ module Pod
       def self.options
         [
             ["--all", "Show information about all Pods with dependencies that are used in a project"],
-            ["--md", "Output information in Markdown format"]
+            ["--md", "Output information in Markdown format"],
+            ["--csv", "Output information in CSV format"]
         ].concat(super)
       end
 
       def initialize(argv)
         @info_all = argv.flag?('all')
-        @info_in_md = argv.flag?('md')
-        @info_license = argv.flag?('license')
+        
+        @type = :text
+        @type = :md if argv.flag?('md')
+        @type = :csv if argv.flag?('csv')
+
         @podfile_path = argv.shift_argument
         super
       end
@@ -49,7 +53,7 @@ module Pod
         end
 
         UI.puts "\nPods used:\n".yellow unless @info_in_md
-        pods_info(pods, @info_in_md)
+        pods_info(pods, @type)
       end
 
       def pods_from_podfile(podfile)
@@ -59,7 +63,7 @@ module Pod
         pods.collect! {|pod| (pod.is_a?(Hash)) ? pod.keys.first : pod}
       end
 
-      def pods_info_hash(pods, keys=[:name, :homepage, :summary, :license])
+      def pods_info_hash(pods, keys=[:name, :version, :homepage, :summary, :license])
         pods_info = []
         pods.each do |pod|
           spec = (Pod::SourcesManager.search_by_name(pod).first rescue nil)
@@ -72,14 +76,18 @@ module Pod
         pods_info
       end
 
-      def pods_info(pods, in_md=false)
-        pods = pods_info_hash(pods, [:name, :homepage, :summary, :license])
+      def pods_info(pods, type)
+        pods = pods_info_hash(pods, [:name, :version, :homepage, :summary, :license])
+        UI.puts "name,version,homepage,summary,license" if type == :csv
 
         pods.each do |pod|
-          if in_md
-            UI.puts "* [#{pod[:name]}](#{pod[:homepage]}) [#{pod[:license][:type]}] - #{pod[:summary]}"
+          case type
+          when :md
+            UI.puts "* [#{pod[:name]} - #{pod[:version]}](#{pod[:homepage]}) [#{pod[:license][:type]}] - #{pod[:summary]}"
+          when :csv
+            UI.puts "#{pod[:name]},#{pod[:version]},#{pod[:homepage]},\"#{pod[:summary]}\",\"#{pod[:license][:type]}\""
           else
-            UI.puts "- #{pod[:name]} [#{pod[:license][:type]}]".green
+            UI.puts "- #{pod[:name]} (#{pod[:version]}) [#{pod[:license][:type]}]".green
             UI.puts "  #{pod[:summary]}\n\n"
           end
         end
